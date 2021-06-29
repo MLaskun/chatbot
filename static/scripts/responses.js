@@ -1,10 +1,11 @@
+
 function getBotResponse(input){
     switch(input) {
-        case "test":
-            return "to był test";
+        case "student":
+            return "jesteś studentem";
             break;
-        case "prz":
-            return "politechnika";
+        case "pracownik":
+            return "jesteś pracownikiem";
             break;
         default:
             return "Nie rozumiem";

@@ -121,6 +121,17 @@
     animation: floatup .5s forwards
 }
 
+.userText button {
+    line-height: 1.5em;
+    display: inline-block;
+    background: #5ca6fa;
+    padding: 10px;
+    border-radius: 8px;
+    border-bottom-right-radius: 2px;
+    max-width: 80%;
+    margin-right: 10px;
+    animation: floatup .5s forwards
+}
 .botText {
     color: #000;
     font-family: Helvetica;

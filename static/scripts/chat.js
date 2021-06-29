@@ -35,9 +35,25 @@ function firstBotMessage() {
 
     $("#chat-timestamp").append(time);
     document.getElementById("userInput").scrollIntoView(false);
+    // document.getElementById("userInput").hidden = true;
 }
 
 firstBotMessage();
+
+/*************** TABLICE OPCJI UŻYTKOWNIKA *********************/
+const pierwsza = ["student", "pracownik"];
+
+function userSelect(options) {
+    options.forEach(selectionButton)
+}
+
+function selectionButton(option) {
+    let userHtml = '<p class="userText"><button>' + option + '</button></p>';
+    $("#chatbox").append(userHtml);
+    document.getElementById("chat-bar-bottom").scrollIntoView(true);
+}
+
+userSelect(pierwsza);
 
 function getHardResponse(userText) {
     let botResponse = getBotResponse(userText);
@@ -58,7 +74,7 @@ function getResponse(){
 
     setTimeout(()=>{
         getHardResponse(userText);
-    }, 1000)
+    }, 500)
 }
 
 function buttonSendText(sampleText){
