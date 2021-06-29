@@ -7,6 +7,14 @@ function getBotResponse(input){
         case "pracownik":
             return "jesteś pracownikiem";
             break;
+
+
+
+
+
+
+
+
         default:
             return "Nie rozumiem";
     }

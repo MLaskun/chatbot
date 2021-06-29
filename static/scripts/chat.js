@@ -41,19 +41,59 @@ function firstBotMessage() {
 firstBotMessage();
 
 /*************** TABLICE OPCJI UŻYTKOWNIKA *********************/
-const pierwsza = ["student", "pracownik"];
+const initialArray = ["student", "pracownik"];
+const student1 =["opcja1","opcja2","opcja3"];
+const student2 =["opcja1","opcja2","opcja3"];
+const student3 =["opcja1","opcja2","opcja3"];
+
+
+
 
 function userSelect(options) {
     options.forEach(selectionButton)
 }
 
 function selectionButton(option) {
-    let userHtml = '<p class="userText"><button>' + option + '</button></p>';
+    let userHtml = '<p class="userText"><button onclick="getBtnText(this)" class="btnOption">' + option + '</button></p>';
     $("#chatbox").append(userHtml);
     document.getElementById("chat-bar-bottom").scrollIntoView(true);
 }
 
-userSelect(pierwsza);
+userSelect(initialArray);
+
+function getBtnText(btn) {
+    let innerText = btn.textContent;
+    removeButtons();
+    buttonSendText(innerText);
+    btnResponse(innerText);
+
+    setTimeout(()=>{
+       userSelect(getResponseText());
+    }, 500)
+    
+}
+
+function getResponseText() {
+    let coll = document.getElementsByClassName("botText");
+    let text = toArray(coll);
+    let last = text.length-1;
+    let resp = text[last].innerText;
+    return resp;
+}
+
+function toArray(x) {
+    for(var i = 0, a = []; i < x.length; i++)
+        a.push(x[i]);
+
+    return a
+}
+
+function removeButtons() {
+    let elements = document.getElementsByClassName("btnOption");
+    while(elements.length > 0){
+        elements[0].parentNode.removeChild(elements[0]);
+    }
+}
 
 function getHardResponse(userText) {
     let botResponse = getBotResponse(userText);
@@ -61,6 +101,12 @@ function getHardResponse(userText) {
     $("#chatbox").append(botHtml);
 
     document.getElementById("chat-bar-bottom").scrollIntoView(true);
+}
+
+function btnResponse(btnText) {
+    setTimeout(()=>{
+        getHardResponse(btnText);
+    }, 500)
 }
 
 function getResponse(){
