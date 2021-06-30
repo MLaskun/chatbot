@@ -29,7 +29,7 @@ function getTime(){
 }
 
 function firstBotMessage() {
-    let firstMessage = "W czym mogę Ci pomóc?";
+    let firstMessage = "Witaj, jestem botem Helpdesk, powiedz mi kim jesteś wybierając jedną z poniższych opcji: ";
     document.getElementById("botStarterMessage").innerHTML = '<p class="botText"><span>' + firstMessage + '</span></p>';
     let time = getTime();
 
@@ -40,14 +40,7 @@ function firstBotMessage() {
 
 firstBotMessage();
 
-/*************** TABLICE OPCJI UŻYTKOWNIKA *********************/
-const initialArray = ["student", "pracownik"];
-const student1 =["opcja1","opcja2","opcja3"];
-const student2 =["opcja1","opcja2","opcja3"];
-const student3 =["opcja1","opcja2","opcja3"];
-
-
-
+const initialArray = ["studentem", "pracownikiem", "kandydatem", "użytkownikiem biblioteki"];
 
 function userSelect(options) {
     options.forEach(selectionButton)
@@ -65,28 +58,42 @@ function getBtnText(btn) {
     let innerText = btn.textContent;
     removeButtons();
     buttonSendText(innerText);
-    btnResponse(innerText);
-
-    setTimeout(()=>{
-       userSelect(getResponseText());
-    }, 500)
+    let botResponse = getHardResponse(innerText);
+    if(botResponse.endOfTree){
+        setTimeout(()=>{
+            botSendText(botResponse.link);
+        }, 500)
+        setTimeout(()=>{
+            userSelect(botResponse.responseArray);
+        }, 500)
+    }
+    else {
+        setTimeout(()=>{
+            userSelect(botResponse.responseArray);
+        }, 500)
+    }
+    
     
 }
 
-function getResponseText() {
-    let coll = document.getElementsByClassName("botText");
-    let text = toArray(coll);
-    let last = text.length-1;
-    let resp = text[last].innerText;
-    return resp;
-}
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
 
-function toArray(x) {
-    for(var i = 0, a = []; i < x.length; i++)
-        a.push(x[i]);
+// function getResponseText() {
+//     let coll = document.getElementsByClassName("botText");
+//     let text = toArray(coll);
+//     let last = text.length-1;
+//     let resp = text[last].innerText;
+//     return resp;
+// }
 
-    return a
-}
+// function toArray(x) {
+//     for(var i = 0, a = []; i < x.length; i++)
+//         a.push(x[i]);
+
+//     return a
+// }
 
 function removeButtons() {
     let elements = document.getElementsByClassName("btnOption");
@@ -97,10 +104,11 @@ function removeButtons() {
 
 function getHardResponse(userText) {
     let botResponse = getBotResponse(userText);
-    let botHtml = '<p class="botText"><span>' + botResponse + '</span></p>';
+    let botHtml = '<p class="botText"><span>' + botResponse.response + '</span></p>';
     $("#chatbox").append(botHtml);
 
     document.getElementById("chat-bar-bottom").scrollIntoView(true);
+    return botResponse;
 }
 
 function btnResponse(btnText) {
@@ -112,7 +120,7 @@ function btnResponse(btnText) {
 function getResponse(){
     let userText = $("#textInput").val();
 
-    if(userText=="") userText = "Klikłem se entera";
+    if(userText=="") userText = "Ptaszek został kliknięty";
     let userHtml = '<p class="userText"><span>' + userText + '</span></p>';
     $("#textInput").val("");
     $("#chatbox").append(userHtml);
@@ -130,12 +138,25 @@ function buttonSendText(sampleText){
     document.getElementById("chat-bar-bottom").scrollIntoView(true);
 }
 
+function botSendText(sampleText) {
+    let botHtml = '<p class="botText"><span>' + sampleText + '</span></p>';
+    $("#chatbox").append(botHtml);
+    document.getElementById("chat-bar-bottom").scrollIntoView(true);
+}
+
 function sendButton(){
     getResponse();
 }
 
 function iconButton(){
-    buttonSendText("Lubię to!");
+    removeButtons();
+    let firstMessage = "Zaczynamy jeszcze raz, powiedz mi kim jesteś wybierając jedną z poniższych opcji: ";
+    let botHtml = '<p class="botText"><span>' + firstMessage + '</span></p>';
+    $("#chatbox").append(botHtml);
+    let time = getTime();
+
+    $("#chat-timestamp").append(time);
+    userSelect(initialArray);
 }
 
 $("#textInput").keypress(function(e){
